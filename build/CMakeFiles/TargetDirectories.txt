@@ -1,0 +1,3 @@
+/sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/environment.dir
+/sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/edit_cache.dir
+/sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/rebuild_cache.dir

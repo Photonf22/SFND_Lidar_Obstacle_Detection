@@ -42,13 +42,23 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     // ----------------------------------------------------
     
     // RENDER OPTIONS
-    bool renderScene = true;
+    // So here if we turn this to false then it will take away the cars on the scene and only show our car
+    bool renderScene = false;
     std::vector<Car> cars = initHighway(renderScene, viewer);
     
     // TODO:: Create lidar sensor 
+    Lidar* lidar = new Lidar(cars,0); 
+    pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud= lidar->scan();
+    //renderRays(viewer,lidar->position, inputCloud);
+    Color colors = Color(255,102,0);
+    renderPointCloud(viewer, inputCloud,"cloud",colors);
+
+    // used lidar and created point clouds above and visualized them!
 
     // TODO:: Create point processor
-  
+    ProcessPointClouds<pcl::PointXYZ>* ProcessorpointCloud = new ProcessPointClouds<pcl::PointXYZ>();
+    
+    
 }
 
 
@@ -82,11 +92,14 @@ int main (int argc, char** argv)
 
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
     CameraAngle setAngle = XY;
+    
+    pcl::PointCloud<pcl::PointXYZ>::Ptr  temp;
     initCamera(setAngle, viewer);
     simpleHighway(viewer);
 
     while (!viewer->wasStopped ())
     {
         viewer->spinOnce ();
+
     } 
 }
