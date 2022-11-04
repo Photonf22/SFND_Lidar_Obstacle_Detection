@@ -1,3 +1,8 @@
+Personal Notes:
+Project was cloned and build in Ubuntu 20.04.5 Focal Fossa. Since other newer versions of ubuntu were not compatible with the PCL libraries needed to build and run the project. OpenGL was not working correctly for Ubuntu 22.04 Jammy Jellyfish. Seems like the API for OpenGL for newer versions of Ubuntu still have bugs and wouldn't let me run the simulation.
+
+
+
 # Sensor Fusion Self-Driving Car Course
 
 <img src="media/ObstacleDetectionFPS.gif" width="700" height="400" />
