@@ -1,8 +1,8 @@
 CMakeFiles/environment.dir/src/environment.cpp.o: \
- /sensor/SFND_Lidar_Obstacle_Detection/src/environment.cpp \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/environment.cpp \
  /usr/include/stdc-predef.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/sensors/lidar.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/sensors/../render/render.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/sensors/lidar.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/sensors/../render/render.h \
  /usr/include/pcl-1.10/pcl/visualization/pcl_visualizer.h \
  /usr/include/pcl-1.10/pcl/correspondence.h \
  /usr/include/pcl-1.10/pcl/make_shared.h /usr/include/c++/9/type_traits \
@@ -1549,9 +1549,9 @@ CMakeFiles/environment.dir/src/environment.cpp.o: \
  /usr/include/vtk-7.1/vtkPolygon.h \
  /usr/include/vtk-7.1/vtkUnstructuredGrid.h \
  /usr/include/vtk-7.1/vtkUnstructuredGridBase.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/sensors/../render/box.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/render/render.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/sensors/../render/box.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/render/render.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.h \
  /usr/include/pcl-1.10/pcl/io/pcd_io.h \
  /usr/include/pcl-1.10/pcl/io/file_io.h \
  /usr/include/pcl-1.10/pcl/io/boost.h /usr/include/boost/mpl/inherit.hpp \
@@ -1979,5 +1979,5 @@ CMakeFiles/environment.dir/src/environment.cpp.o: \
  /usr/include/c++/9/bits/stl_queue.h \
  /usr/include/pcl-1.10/pcl/common/projection_matrix.h \
  /usr/include/pcl-1.10/pcl/common/impl/projection_matrix.hpp \
- /sensor/SFND_Lidar_Obstacle_Detection/src/render/box.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp
+ /lidar/SFND_Lidar_Obstacle_Detection/src/render/box.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp

@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /sensor/SFND_Lidar_Obstacle_Detection
+CMAKE_SOURCE_DIR = /lidar/SFND_Lidar_Obstacle_Detection
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /sensor/SFND_Lidar_Obstacle_Detection/build
+CMAKE_BINARY_DIR = /lidar/SFND_Lidar_Obstacle_Detection/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/environment.dir/depend.make
@@ -70,46 +70,46 @@ include CMakeFiles/environment.dir/progress.make
 include CMakeFiles/environment.dir/flags.make
 
 CMakeFiles/environment.dir/src/environment.cpp.o: CMakeFiles/environment.dir/flags.make
-CMakeFiles/environment.dir/src/environment.cpp.o: /sensor/SFND_Lidar_Obstacle_Detection/src/environment.cpp
+CMakeFiles/environment.dir/src/environment.cpp.o: /lidar/SFND_Lidar_Obstacle_Detection/src/environment.cpp
 CMakeFiles/environment.dir/src/environment.cpp.o: CMakeFiles/environment.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/environment.dir/src/environment.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/environment.dir/src/environment.cpp.o -MF CMakeFiles/environment.dir/src/environment.cpp.o.d -o CMakeFiles/environment.dir/src/environment.cpp.o -c /sensor/SFND_Lidar_Obstacle_Detection/src/environment.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/lidar/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/environment.dir/src/environment.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/environment.dir/src/environment.cpp.o -MF CMakeFiles/environment.dir/src/environment.cpp.o.d -o CMakeFiles/environment.dir/src/environment.cpp.o -c /lidar/SFND_Lidar_Obstacle_Detection/src/environment.cpp
 
 CMakeFiles/environment.dir/src/environment.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/environment.dir/src/environment.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /sensor/SFND_Lidar_Obstacle_Detection/src/environment.cpp > CMakeFiles/environment.dir/src/environment.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /lidar/SFND_Lidar_Obstacle_Detection/src/environment.cpp > CMakeFiles/environment.dir/src/environment.cpp.i
 
 CMakeFiles/environment.dir/src/environment.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/environment.dir/src/environment.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /sensor/SFND_Lidar_Obstacle_Detection/src/environment.cpp -o CMakeFiles/environment.dir/src/environment.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /lidar/SFND_Lidar_Obstacle_Detection/src/environment.cpp -o CMakeFiles/environment.dir/src/environment.cpp.s
 
 CMakeFiles/environment.dir/src/render/render.cpp.o: CMakeFiles/environment.dir/flags.make
-CMakeFiles/environment.dir/src/render/render.cpp.o: /sensor/SFND_Lidar_Obstacle_Detection/src/render/render.cpp
+CMakeFiles/environment.dir/src/render/render.cpp.o: /lidar/SFND_Lidar_Obstacle_Detection/src/render/render.cpp
 CMakeFiles/environment.dir/src/render/render.cpp.o: CMakeFiles/environment.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/environment.dir/src/render/render.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/environment.dir/src/render/render.cpp.o -MF CMakeFiles/environment.dir/src/render/render.cpp.o.d -o CMakeFiles/environment.dir/src/render/render.cpp.o -c /sensor/SFND_Lidar_Obstacle_Detection/src/render/render.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/lidar/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/environment.dir/src/render/render.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/environment.dir/src/render/render.cpp.o -MF CMakeFiles/environment.dir/src/render/render.cpp.o.d -o CMakeFiles/environment.dir/src/render/render.cpp.o -c /lidar/SFND_Lidar_Obstacle_Detection/src/render/render.cpp
 
 CMakeFiles/environment.dir/src/render/render.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/environment.dir/src/render/render.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /sensor/SFND_Lidar_Obstacle_Detection/src/render/render.cpp > CMakeFiles/environment.dir/src/render/render.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /lidar/SFND_Lidar_Obstacle_Detection/src/render/render.cpp > CMakeFiles/environment.dir/src/render/render.cpp.i
 
 CMakeFiles/environment.dir/src/render/render.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/environment.dir/src/render/render.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /sensor/SFND_Lidar_Obstacle_Detection/src/render/render.cpp -o CMakeFiles/environment.dir/src/render/render.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /lidar/SFND_Lidar_Obstacle_Detection/src/render/render.cpp -o CMakeFiles/environment.dir/src/render/render.cpp.s
 
 CMakeFiles/environment.dir/src/processPointClouds.cpp.o: CMakeFiles/environment.dir/flags.make
-CMakeFiles/environment.dir/src/processPointClouds.cpp.o: /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp
+CMakeFiles/environment.dir/src/processPointClouds.cpp.o: /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp
 CMakeFiles/environment.dir/src/processPointClouds.cpp.o: CMakeFiles/environment.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/environment.dir/src/processPointClouds.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/environment.dir/src/processPointClouds.cpp.o -MF CMakeFiles/environment.dir/src/processPointClouds.cpp.o.d -o CMakeFiles/environment.dir/src/processPointClouds.cpp.o -c /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/lidar/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/environment.dir/src/processPointClouds.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/environment.dir/src/processPointClouds.cpp.o -MF CMakeFiles/environment.dir/src/processPointClouds.cpp.o.d -o CMakeFiles/environment.dir/src/processPointClouds.cpp.o -c /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp
 
 CMakeFiles/environment.dir/src/processPointClouds.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/environment.dir/src/processPointClouds.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp > CMakeFiles/environment.dir/src/processPointClouds.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp > CMakeFiles/environment.dir/src/processPointClouds.cpp.i
 
 CMakeFiles/environment.dir/src/processPointClouds.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/environment.dir/src/processPointClouds.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp -o CMakeFiles/environment.dir/src/processPointClouds.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp -o CMakeFiles/environment.dir/src/processPointClouds.cpp.s
 
 # Object files for target environment
 environment_OBJECTS = \
@@ -216,7 +216,7 @@ environment: /usr/lib/x86_64-linux-gnu/libX11.so
 environment: /usr/lib/x86_64-linux-gnu/libXext.so
 environment: /usr/lib/x86_64-linux-gnu/libXt.so
 environment: CMakeFiles/environment.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable environment"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/lidar/SFND_Lidar_Obstacle_Detection/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable environment"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/environment.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -228,6 +228,6 @@ CMakeFiles/environment.dir/clean:
 .PHONY : CMakeFiles/environment.dir/clean
 
 CMakeFiles/environment.dir/depend:
-	cd /sensor/SFND_Lidar_Obstacle_Detection/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /sensor/SFND_Lidar_Obstacle_Detection /sensor/SFND_Lidar_Obstacle_Detection /sensor/SFND_Lidar_Obstacle_Detection/build /sensor/SFND_Lidar_Obstacle_Detection/build /sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/environment.dir/DependInfo.cmake --color=$(COLOR)
+	cd /lidar/SFND_Lidar_Obstacle_Detection/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /lidar/SFND_Lidar_Obstacle_Detection /lidar/SFND_Lidar_Obstacle_Detection /lidar/SFND_Lidar_Obstacle_Detection/build /lidar/SFND_Lidar_Obstacle_Detection/build /lidar/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/environment.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/environment.dir/depend
 

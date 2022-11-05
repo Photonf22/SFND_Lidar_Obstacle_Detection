@@ -57,10 +57,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /sensor/SFND_Lidar_Obstacle_Detection
+CMAKE_SOURCE_DIR = /lidar/SFND_Lidar_Obstacle_Detection
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /sensor/SFND_Lidar_Obstacle_Detection/build
+CMAKE_BINARY_DIR = /lidar/SFND_Lidar_Obstacle_Detection/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles /sensor/SFND_Lidar_Obstacle_Detection/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /lidar/SFND_Lidar_Obstacle_Detection/build/CMakeFiles /lidar/SFND_Lidar_Obstacle_Detection/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /sensor/SFND_Lidar_Obstacle_Detection/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /lidar/SFND_Lidar_Obstacle_Detection/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

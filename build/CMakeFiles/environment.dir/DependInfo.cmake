@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/sensor/SFND_Lidar_Obstacle_Detection/src/environment.cpp" "CMakeFiles/environment.dir/src/environment.cpp.o" "gcc" "CMakeFiles/environment.dir/src/environment.cpp.o.d"
-  "/sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp" "CMakeFiles/environment.dir/src/processPointClouds.cpp.o" "gcc" "CMakeFiles/environment.dir/src/processPointClouds.cpp.o.d"
-  "/sensor/SFND_Lidar_Obstacle_Detection/src/render/render.cpp" "CMakeFiles/environment.dir/src/render/render.cpp.o" "gcc" "CMakeFiles/environment.dir/src/render/render.cpp.o.d"
+  "/lidar/SFND_Lidar_Obstacle_Detection/src/environment.cpp" "CMakeFiles/environment.dir/src/environment.cpp.o" "gcc" "CMakeFiles/environment.dir/src/environment.cpp.o.d"
+  "/lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp" "CMakeFiles/environment.dir/src/processPointClouds.cpp.o" "gcc" "CMakeFiles/environment.dir/src/processPointClouds.cpp.o.d"
+  "/lidar/SFND_Lidar_Obstacle_Detection/src/render/render.cpp" "CMakeFiles/environment.dir/src/render/render.cpp.o" "gcc" "CMakeFiles/environment.dir/src/render/render.cpp.o.d"
   )
 
 # Targets to which this target links.

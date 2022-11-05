@@ -49,16 +49,27 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     // TODO:: Create lidar sensor 
     Lidar* lidar = new Lidar(cars,0); 
     pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud= lidar->scan();
+    // renderRays will basically render the rays on top of the car and show the lidar unit and we can also increase the amount of laser 
+    // points or lasers in the lidar. One can increase the lidars and get a better resolution or more points
+    /* This function renders the lidar rays or laser rays in the viewer */
     //renderRays(viewer,lidar->position, inputCloud);
-    Color colors = Color(255,102,0);
-    renderPointCloud(viewer, inputCloud,"cloud",colors);
+    /* Rendering the point cloud*/
+    //Color colors = Color(255,102,0);
+    renderPointCloud(viewer, inputCloud,"inputCloud");
 
+    // Here starts the "segmentation" part of the Lesson!
     // used lidar and created point clouds above and visualized them!
 
-    // TODO:: Create point processor
-    ProcessPointClouds<pcl::PointXYZ>* ProcessorpointCloud = new ProcessPointClouds<pcl::PointXYZ>();
+    // TODO:: Create point cloud processor
+    ProcessPointClouds<pcl::PointXYZ> ProcessorpointCloud;
+    // The segmentation algorithm fits a plan to the points and uses the distance tolerance to decide which points belong
+    // to that plane. A large tolerance includes more points in the plane
     
-    
+   
+    std::pair<pcl::PointCloud<pcl::PointXYZ>::Ptr,pcl::PointCloud<pcl::PointXYZ>::Ptr> segmentCloud = ProcessorpointCloud.SegmentPlane(inputCloud, 100, 0.2);
+    renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,0));
+    renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
+
 }
 
 
@@ -88,12 +99,15 @@ void initCamera(CameraAngle setAngle, pcl::visualization::PCLVisualizer::Ptr& vi
 
 int main (int argc, char** argv)
 {
+    // with the following function calls it will render the point cloud on the opengl window and we will see all the pcd points
+    // We can also change the RGB colors of the points to whatever we want by changing the Color Struct
+    // if we put renderScene to false in simplehighway() then it will ignore the cars on the road and not render them
     std::cout << "starting enviroment" << std::endl;
 
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
     CameraAngle setAngle = XY;
     
-    pcl::PointCloud<pcl::PointXYZ>::Ptr  temp;
+    //pcl::PointCloud<pcl::PointXYZ>::Ptr  temp;
     initCamera(setAngle, viewer);
     simpleHighway(viewer);
 

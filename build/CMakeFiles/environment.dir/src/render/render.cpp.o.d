@@ -1,7 +1,7 @@
 CMakeFiles/environment.dir/src/render/render.cpp.o: \
- /sensor/SFND_Lidar_Obstacle_Detection/src/render/render.cpp \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/render/render.cpp \
  /usr/include/stdc-predef.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/render/render.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/render/render.h \
  /usr/include/pcl-1.10/pcl/visualization/pcl_visualizer.h \
  /usr/include/pcl-1.10/pcl/correspondence.h \
  /usr/include/pcl-1.10/pcl/make_shared.h /usr/include/c++/9/type_traits \
@@ -1548,4 +1548,4 @@ CMakeFiles/environment.dir/src/render/render.cpp.o: \
  /usr/include/vtk-7.1/vtkPolygon.h \
  /usr/include/vtk-7.1/vtkUnstructuredGrid.h \
  /usr/include/vtk-7.1/vtkUnstructuredGridBase.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/render/box.h
+ /lidar/SFND_Lidar_Obstacle_Detection/src/render/box.h

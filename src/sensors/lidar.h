@@ -86,6 +86,9 @@ struct Lidar
 		: cloud(new pcl::PointCloud<pcl::PointXYZ>()), position(0,0,2.6)
 	{
 		// TODO:: set minDistance to 5 to remove points from roof of ego car
+		// minDistance is what tells t he algorithm that if we see a point such as the roof of the car then ignore it.
+		// then it would also show the roof of the car and by increasing it to 5 then we are actually ignoring the roof
+		// of the car
 		minDistance = 5;
 		maxDistance = 50;
 		resoultion = 0.2;
@@ -100,6 +103,7 @@ struct Lidar
 		double steepestAngle =  30.0*(-pi/180);
 		double angleRange = 26.0*(pi/180);
 		// TODO:: set to pi/64 to get higher resoultion pcd
+		// horizontal layer resolution increase it! 
 		double horizontalAngleInc = pi/64;
 
 		double angleIncrement = angleRange/numLayers;

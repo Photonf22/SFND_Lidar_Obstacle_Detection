@@ -1,7 +1,7 @@
 CMakeFiles/environment.dir/src/processPointClouds.cpp.o: \
- /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp \
  /usr/include/stdc-predef.h \
- /sensor/SFND_Lidar_Obstacle_Detection/src/processPointClouds.h \
+ /lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.h \
  /usr/include/pcl-1.10/pcl/io/pcd_io.h \
  /usr/include/pcl-1.10/pcl/pcl_macros.h /usr/include/c++/9/cmath \
  /usr/include/x86_64-linux-gnu/c++/9/bits/c++config.h \
@@ -1839,4 +1839,4 @@ CMakeFiles/environment.dir/src/processPointClouds.cpp.o: \
  /usr/include/c++/9/bits/stl_queue.h \
  /usr/include/pcl-1.10/pcl/common/projection_matrix.h \
  /usr/include/pcl-1.10/pcl/common/impl/projection_matrix.hpp \
- /sensor/SFND_Lidar_Obstacle_Detection/src/render/box.h
+ /lidar/SFND_Lidar_Obstacle_Detection/src/render/box.h
