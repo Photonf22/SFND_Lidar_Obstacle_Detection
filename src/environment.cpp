@@ -48,6 +48,10 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     
     // TODO:: Create lidar sensor 
     Lidar* lidar = new Lidar(cars,0); 
+    bool render_obst =false;
+    bool render_plane =false;
+    bool render_clusters =true;
+    bool render_box =true;
     pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud= lidar->scan();
     // renderRays will basically render the rays on top of the car and show the lidar unit and we can also increase the amount of laser 
     // points or lasers in the lidar. One can increase the lidars and get a better resolution or more points
@@ -64,11 +68,39 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     ProcessPointClouds<pcl::PointXYZ> ProcessorpointCloud;
     // The segmentation algorithm fits a plan to the points and uses the distance tolerance to decide which points belong
     // to that plane. A large tolerance includes more points in the plane
-    
    
     std::pair<pcl::PointCloud<pcl::PointXYZ>::Ptr,pcl::PointCloud<pcl::PointXYZ>::Ptr> segmentCloud = ProcessorpointCloud.SegmentPlane(inputCloud, 100, 0.2);
-    renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,0));
-    renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
+     if(render_obst)
+    {
+        
+        renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,0));
+    }
+    if(render_plane)
+    {
+         
+        renderPointCloud(viewer,segmentCloud.second,"obstCloud",Color(1,0,0));
+    }
+    std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloudClusters = ProcessorpointCloud.Clustering(segmentCloud.first, 1.0, 3, 30);
+    int clusterId = 0;
+    std::vector<Color> colors = {Color(1,0,0), Color(0,1,0), Color(0,1,0)};
+
+    for(pcl::PointCloud<pcl::PointXYZ>::Ptr cluster : cloudClusters)
+    {
+        if(render_clusters)
+        {
+            std::cout << "cluster size ";
+            ProcessorpointCloud.numPoints(cluster);
+            renderPointCloud(viewer,cluster,"obstCloud"+std::to_string(clusterId),colors[clusterId]);
+        }
+        if(render_box)
+        {
+            Box box = ProcessorpointCloud.BoundingBox(cluster);
+            renderBox(viewer,box,clusterId);
+        }
+      ++clusterId;
+    }
+    // renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,0));
+    // renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
 
 }
 
@@ -95,10 +127,22 @@ void initCamera(CameraAngle setAngle, pcl::visualization::PCLVisualizer::Ptr& vi
     if(setAngle!=FPS)
         viewer->addCoordinateSystem (1.0);
 }
-
+void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
+{
+  // ----------------------------------------------------
+  // -----Open 3D viewer and display City Block     -----
+  // ----------------------------------------------------
+  // dealing with point clouds with intensity values
+  // If use pointer then we initialize in the heap such as below
+  ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
+  pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessorI->loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");
+  renderPointCloud(viewer,inputCloud,"inputCloud");
+}
 
 int main (int argc, char** argv)
 {
+    int simplehighway= false;
+    int cityviewer = true;
     // with the following function calls it will render the point cloud on the opengl window and we will see all the pcd points
     // We can also change the RGB colors of the points to whatever we want by changing the Color Struct
     // if we put renderScene to false in simplehighway() then it will ignore the cars on the road and not render them
@@ -109,8 +153,10 @@ int main (int argc, char** argv)
     
     //pcl::PointCloud<pcl::PointXYZ>::Ptr  temp;
     initCamera(setAngle, viewer);
-    simpleHighway(viewer);
-
+    if(simplehighway)
+     simpleHighway(viewer);
+    else if(cityviewer)
+        cityBlock(viewer);
     while (!viewer->wasStopped ())
     {
         viewer->spinOnce ();

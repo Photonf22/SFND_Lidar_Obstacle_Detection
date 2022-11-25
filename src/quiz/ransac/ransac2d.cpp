@@ -1,11 +1,11 @@
 /* \author Aaron Brown */
 // Quiz on implementing simple RANSAC line fitting
 
-#include "../../render/render.h"
+#include "/lidar/SFND_Lidar_Obstacle_Detection/src/render/render.h"
 #include <unordered_set>
-#include "../../processPointClouds.h"
+#include "/lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.h"
 // using templates for processPointClouds so also include .cpp to help linker
-#include "../../processPointClouds.cpp"
+#include "/lidar/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp"
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr CreateData()
 {
@@ -60,6 +60,13 @@ pcl::visualization::PCLVisualizer::Ptr initScene()
   	viewer->addCoordinateSystem (1.0);
   	return viewer;
 }
+
+// Notes:
+/* This function segments out the outliers from the inliers and this way we can detect what plane is the road
+and what plane is the obstacles on the road and this way we can get the indeces of the obstacles or outliers
+Then we can also separate our point clouds from the road to the obstacles
+*/
+
 // Quiz: Make a RANSAC equation for 2D data and calculate the best line to get the most amount of inliers and figure out
 // what points are the outliers
 std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int maxIterations, float distanceTol)
@@ -67,18 +74,19 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
 	std::unordered_set<int> inliersResult;
 	
 	srand(time(NULL));
-	double A  = 0;
-	double B = 0;
-	double C = 0;
+	 float A = 0;
+	 float B = 0;
+	 float C = 0;
+	 float D = 0;
 	int inliers = 0;
 	float temp_distance = 0;
 	int max_distance = 0;
-	int i = 0;
+	int q = 0;
 	int point2 =0;
 	int point1 =0;
-
+	int point3 = 0;
 	// TODO: Fill in this function
-	while(i < maxIterations)
+	while(q < maxIterations)
 	{
 		std::unordered_set<int> temp;
 	 	point1 = rand() & cloud->points.size();
@@ -90,24 +98,42 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
 				break;
 			}
 		}
-		A = (cloud->points[point1].y - cloud->points[point2].y) ;
-		B = (cloud->points[point2].x - cloud->points[point1].x) ;
-		C = (cloud->points[point1].x * cloud->points[point2].y - cloud->points[point2].x * cloud->points[point1].y);
+		while(1)
+		{
+			point3 = rand() & cloud->points.size();
+			if(point3 != point1 && point3 != point2)
+			{
+				break;
+			}
+		}
+		float i = (cloud->points[point2].y - cloud->points[point1].y)*(cloud->points[point3].z - cloud->points[point1].z) -
+				(cloud->points[point2].z - cloud->points[point1].z)*(cloud->points[point3].y - cloud->points[point1].y);
+		
+		float j = (cloud->points[point2].z - cloud->points[point1].z)*(cloud->points[point3].x - cloud->points[point1].x) -
+				(cloud->points[point2].x - cloud->points[point1].x)*(cloud->points[point3].z - cloud->points[point1].z);
+		
+		float k = (cloud->points[point2].x - cloud->points[point1].x)*(cloud->points[point3].y - cloud->points[point1].y) -
+				(cloud->points[point2].y - cloud->points[point1].y)*(cloud->points[point3].x - cloud->points[point1].x);
+
+		A = i;
+		B = j ;
+		C = k;
+		D= (i*cloud->points[point1].x + j*cloud->points[point1].y + k*cloud->points[point1].z);
 		//iterating through every point and getting the distance of the point to the line if below threshold then its an inlier
 		
-		for(i = 0;i < cloud->points.size();  i++)
+		for(int p = 0;p < cloud->points.size();  p++)
 		{
-			temp_distance = fabs(A*cloud->points[i].x + B*cloud->points[i].y + C)/sqrt(A*A + B*B);
+			temp_distance = fabs(A*cloud->points[p].x + B*cloud->points[p].y + C*cloud->points[p].z - D)/sqrt(A*A + B*B + C*C);
 			if(temp_distance <= distanceTol)
 			{
-				temp.insert(i);
+				temp.insert(p);
 			}
 		}
 		if(inliersResult.size() < temp.size())
 		{
 			inliersResult = temp;
 		}
-		i++;
+		q++;
 	}
 	// For max iterations 
 
@@ -131,7 +157,7 @@ int main ()
 	pcl::visualization::PCLVisualizer::Ptr viewer = initScene();
 
 	// Create data
-	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = CreateData();
+	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = CreateData3D();
 	
 
 	// TODO: Change the max iteration and distance tolerance arguments for Ransac function
