@@ -206,7 +206,7 @@ int main (int argc, char** argv)
     the stream vector in a couple of ways, one option is to use an iterator. At the end of the above code block, 
     a variable for the input point cloud is also set up.
     */
-    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd("../src/sensors/data/pcd/data_2");
+    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd("../src/sensors/data/pcd/data_1");
     auto streamIterator = stream.begin();
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloudI;
     

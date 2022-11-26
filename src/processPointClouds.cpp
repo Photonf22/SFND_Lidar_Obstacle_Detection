@@ -34,27 +34,30 @@ typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(ty
     vg.setLeafSize(filterRes, filterRes, filterRes);
     vg.filter(*cloudFiltered);
     // Region of interest algorithm processor
-    typename pcl::PointCloud<PointT>::Ptr cloudRegion (new pcl::PointCloud<PointT>);
-    pcl::CropBox<PointT> region(true); // set to true because dealing with points inside the crop box
-    region.setMin(minPoint);
-    region.setMax(maxPoint);
-    region.setInputCloud(cloudFiltered);
-    region.filter(*cloudRegion);
+    typename pcl::PointCloud<PointT>::Ptr cloudRegionROI (new pcl::PointCloud<PointT>);
+    pcl::CropBox<PointT> ROI_processor(true); // set to true because dealing with points inside the crop box
+    ROI_processor.setMin(minPoint);
+    ROI_processor.setMax(maxPoint);
+    ROI_processor.setInputCloud(cloudFiltered);
+    ROI_processor.filter(*cloudRegionROI);
     // The below algorithm is when you would like to remove the top roof of your vehicle to remove it from the filtered point cloud/ Optional
     // filter out indices wanted that represent the roof of the car to then be extracted this is similar to what we did with segmentation
-    // similar steps
+    // similar steps below is the actual location of the roof in each .pcd image since the roof is static it will
+    // always have the same location in every pcd
     std::vector<int> indices;
     pcl::CropBox<PointT> roof(true);
     roof.setMin(Eigen::Vector4f (-1.5, -1.7, -1, 1));
     roof.setMax(Eigen::Vector4f (2.6, 1.7, -.4, 1));
-    roof.setInputCloud(cloudRegion);
+    roof.setInputCloud(cloudRegionROI);
     roof.filter(indices);
+    // parsing through each inlier and getting their indices to pass to our vector
     pcl::PointIndices::Ptr inliers {new pcl::PointIndices};
     for(int point : indices)
         inliers->indices.push_back(point);
+    // creating the filtered cloud w/o a roof in which we will pass our new filtered w/o roof cloud
     typename pcl::PointCloud<PointT>::Ptr Filtered_CloudNoRoof (new pcl::PointCloud<PointT>);
     pcl::ExtractIndices<PointT> extract;
-    extract.setInputCloud (cloudRegion);
+    extract.setInputCloud (cloudRegionROI);
     extract.setIndices (inliers);
     extract.setNegative(true); // means we will be removing these roof points
     extract.filter(*Filtered_CloudNoRoof);
@@ -68,6 +71,7 @@ typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(ty
 // Creating the point cloud for the road and another one for the segmented plane
 // the body of this function will include a timer to see how fast this function is
 // if the function is not fast then it will not be helpful to run point clouds in real time
+// This function will separate the obstacle cloud and plane cloud 
 template<typename PointT>
 std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::SeparateClouds(pcl::PointIndices::Ptr inliers, typename pcl::PointCloud<PointT>::Ptr cloud) 
 {
@@ -76,7 +80,7 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
         // Create the filtering object
     typename pcl::ExtractIndices<PointT> extract;
     // Creating segmentation object and filling in the data to tell it that we want to use RANSAC filtering
-    typename pcl::PointCloud<PointT>::Ptr obsCloud (new typename pcl::PointCloud<PointT>());
+    typename pcl::PointCloud<PointT>::Ptr obstacleCloud (new typename pcl::PointCloud<PointT>());
     typename pcl::PointCloud<PointT>::Ptr planeCloud (new typename pcl::PointCloud<PointT>()); 
     // Since now we have all the inliers/indices from the actual cloud now then we can create the planeCloud or road cloud
     // taking all the inliers and pushing it to the planeCloud
@@ -89,8 +93,9 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
     extract.setIndices (inliers);
     // Create the filtering object
     extract.setNegative (true);
-    extract.filter (*obsCloud);
-    std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT>::Ptr> segResult(obsCloud,planeCloud);
+    extract.filter (*obstacleCloud);
+    // making a pair structure to return the plane and obstacle cloud as a function return
+    std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT>::Ptr> segResult(obstacleCloud,planeCloud);
     return segResult;
 }
 
@@ -112,8 +117,6 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
     seg.setMethodType (pcl::SAC_RANSAC);
     seg.setMaxIterations (maxIterations);
     seg.setDistanceThreshold (distanceThreshold);
-
-    
 
     // Segment the largest planar component from the remaining cloud
     seg.setInputCloud (cloud);
