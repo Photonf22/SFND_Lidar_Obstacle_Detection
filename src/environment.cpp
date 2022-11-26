@@ -1,7 +1,6 @@
 /* \author Aaron Brown */
 // Create simple 3d highway enviroment using PCL
 // for exploring self-driving car sensors
-
 #include "sensors/lidar.h"
 #include "render/render.h"
 #include "processPointClouds.h"
@@ -127,43 +126,103 @@ void initCamera(CameraAngle setAngle, pcl::visualization::PCLVisualizer::Ptr& vi
     if(setAngle!=FPS)
         viewer->addCoordinateSystem (1.0);
 }
-void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
+
+
+void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointClouds<pcl::PointXYZI>* pointProcessorI, const pcl::PointCloud<pcl::PointXYZI>::Ptr& inputCloud)
 {
+  bool render_obst = true;
+  bool render_plane = true;
+  bool render_clusters = true;
+  bool render_box = true;
   // ----------------------------------------------------
   // -----Open 3D viewer and display City Block     -----
   // ----------------------------------------------------
   // dealing with point clouds with intensity values
   // If use pointer then we initialize in the heap such as below
-  ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
-  pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessorI->loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");
   // Experiment with the ? values and find what works best
-  pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud;
-  filterCloud = pointProcessorI->FilterCloud(inputCloud, ? , Eigen::Vector4f (?, ?, ?, 1), Eigen::Vector4f ( ?, ?, ?, 1));
-  renderPointCloud(viewer,filterCloud,"filterCloud");
+  pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.2f , Eigen::Vector4f (-15, -5.8, -2, 1), Eigen::Vector4f ( 30, 7, 4, 1));
+                                                                                                    
+  //renderPointCloud(viewer,filterCloud,"filterCloud");
+  // to render the input cloud without filtering uncomment the below and comment out line 140
   //renderPointCloud(viewer,inputCloud,"inputCloud");
+
+  /* Clustering and segmenting the filtered cloud */
+    // The segmentation algorithm fits a plan to the points and uses the distance tolerance to decide which points belong
+    // to that plane. A large tolerance includes more points in the plane
+   
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr,pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessorI->SegmentPlane(filterCloud, 100, 0.2);
+    if(render_obst)
+    {
+        
+        renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,1));
+    }
+    if(render_plane)
+    {
+         
+        renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
+    }
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessorI->Clustering(segmentCloud.first, 0.5, 10, 700);
+    int clusterId = 0;
+    std::vector<Color> colors = {Color(1,0,0), Color(0,1,0), Color(0,1,0)};
+
+    for(pcl::PointCloud<pcl::PointXYZI>::Ptr cluster : cloudClusters)
+    {
+        if(render_clusters)
+        {
+            std::cout << "cluster size ";
+            pointProcessorI->numPoints(cluster);
+            renderPointCloud(viewer,cluster,"obstCloud"+std::to_string(clusterId),colors[clusterId]);
+        }
+        if(render_box)
+        {
+            Box box = pointProcessorI->BoundingBox(cluster);
+            renderBox(viewer,box,clusterId);
+        }
+      ++clusterId;
+    }
+    // renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,0));
+    // renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
 }
 
 int main (int argc, char** argv)
 {
-    int simplehighway= false;
     int cityviewer = true;
+    std::string dir = "../src/sensors/data/pcd/data_1/";
     // with the following function calls it will render the point cloud on the opengl window and we will see all the pcd points
     // We can also change the RGB colors of the points to whatever we want by changing the Color Struct
     // if we put renderScene to false in simplehighway() then it will ignore the cars on the road and not render them
     std::cout << "starting enviroment" << std::endl;
 
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-    CameraAngle setAngle = XY;
+    CameraAngle setAngle = FPS;
     
     //pcl::PointCloud<pcl::PointXYZ>::Ptr  temp;
     initCamera(setAngle, viewer);
-    if(simplehighway)
-     simpleHighway(viewer);
-    else if(cityviewer)
-        cityBlock(viewer);
+    //simpleHighway(viewer);
+    ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
+    /*In the code above, you are making use of a new method from point processor called, streamPcd. 
+    You tell streamPcd a folder directory that contains all the sequentially ordered pcd files you want to process, 
+    and it returns a chronologically ordered vector of all those file names, called stream. You can then go through 
+    the stream vector in a couple of ways, one option is to use an iterator. At the end of the above code block, 
+    a variable for the input point cloud is also set up.
+    */
+    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd("../src/sensors/data/pcd/data_2");
+    auto streamIterator = stream.begin();
+    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloudI;
+    
+    // creates a stream of .pcd objects loads them and processes them one by one and renders each pcd. 
+    // after a loop is compleated then it resets the visual and then loads a new image
     while (!viewer->wasStopped ())
     {
+         // Clear viewer from old added frames and reset it to add a new frame
+        viewer->removeAllPointClouds();
+        viewer->removeAllShapes();
+        inputCloudI = pointProcessorI->loadPcd((*streamIterator).string());
+        
+        cityBlock(viewer, pointProcessorI, inputCloudI);
+        streamIterator++;
+        if(streamIterator == stream.end())
+            streamIterator = stream.begin();
         viewer->spinOnce ();
-
     } 
 }

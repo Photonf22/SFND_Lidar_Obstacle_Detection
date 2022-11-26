@@ -22,54 +22,46 @@ void ProcessPointClouds<PointT>::numPoints(typename pcl::PointCloud<PointT>::Ptr
 
 template<typename PointT>
 typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(typename pcl::PointCloud<PointT>::Ptr cloud, float filterRes, Eigen::Vector4f minPoint, 
-                                                                                                                                Eigen::Vector4f maxPoint)
+                                                                                                                               Eigen::Vector4f maxPoint)
 {
-
     // Time segmentation process
     auto startTime = std::chrono::steady_clock::now();
-
     // TODO:: Fill in the function to do voxel grid point reduction and region based filtering
     // Create the filtering object and perform voxel grid filtering then perform region of interest 
-    typename pcl::PointCloud<PointT>::Ptr cloud_filtered;
-    pcl::VoxelGrid<pcl::PCLPointCloud2> vg;
+    typename pcl::PointCloud<PointT>::Ptr cloudFiltered (new pcl::PointCloud<PointT>);
+    pcl::VoxelGrid<PointT> vg;
     vg.setInputCloud(cloud);
     vg.setLeafSize(filterRes, filterRes, filterRes);
-    vg.filter(*cloud_filtered);
+    vg.filter(*cloudFiltered);
     // Region of interest algorithm processor
     typename pcl::PointCloud<PointT>::Ptr cloudRegion (new pcl::PointCloud<PointT>);
     pcl::CropBox<PointT> region(true); // set to true because dealing with points inside the crop box
     region.setMin(minPoint);
     region.setMax(maxPoint);
-    region.SetInputCloud(cloud_filtered);
+    region.setInputCloud(cloudFiltered);
     region.filter(*cloudRegion);
-
     // The below algorithm is when you would like to remove the top roof of your vehicle to remove it from the filtered point cloud/ Optional
     // filter out indices wanted that represent the roof of the car to then be extracted this is similar to what we did with segmentation
     // similar steps
     std::vector<int> indices;
     pcl::CropBox<PointT> roof(true);
     roof.setMin(Eigen::Vector4f (-1.5, -1.7, -1, 1));
-    roof.setMax(Eigen::Vector4f (2.6,1.7, -.4, 1));
+    roof.setMax(Eigen::Vector4f (2.6, 1.7, -.4, 1));
     roof.setInputCloud(cloudRegion);
     roof.filter(indices);
-
-    pcl::PointIndices::Ptr inliers (new pcl::PointCloud);
+    pcl::PointIndices::Ptr inliers {new pcl::PointIndices};
     for(int point : indices)
         inliers->indices.push_back(point);
-
+    typename pcl::PointCloud<PointT>::Ptr Filtered_CloudNoRoof (new pcl::PointCloud<PointT>);
     pcl::ExtractIndices<PointT> extract;
-    extract.setInputCloud (cloud_region);
+    extract.setInputCloud (cloudRegion);
     extract.setIndices (inliers);
     extract.setNegative(true); // means we will be removing these roof points
-    extract.filter(*cloudRegion);
-
-    typename pcl::StatisticalMultiscaleInterestRegionExtraction<PointT>::Ptr extrac;
+    extract.filter(*Filtered_CloudNoRoof);
     auto endTime = std::chrono::steady_clock::now();
     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
     std::cout << "filtering took " << elapsedTime.count() << " milliseconds" << std::endl;
-
-    return cloudRegion;
-
+    return Filtered_CloudNoRoof;
 }
 
 // TODO Lidar Segmentation 
