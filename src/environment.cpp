@@ -184,6 +184,67 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
     // renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
 }
 
+
+void cityBlock_OwnImplementation(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointClouds<pcl::PointXYZI>* pointProcessorI, const pcl::PointCloud<pcl::PointXYZI>::Ptr& inputCloud)
+{
+  bool render_obst = true;
+  bool render_plane = true;
+  bool render_clusters = true;
+  bool render_box = true;
+  // ----------------------------------------------------
+  // -----Open 3D viewer and display City Block     -----
+  // ----------------------------------------------------
+  // dealing with point clouds with intensity values
+  // If use pointer then we initialize in the heap such as below
+  // Experiment with the ? values and find what works best
+  pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.2f , Eigen::Vector4f (-15, -5.8, -2, 1), Eigen::Vector4f ( 30, 7, 4, 1));
+                                                                                                    
+  //renderPointCloud(viewer,filterCloud,"filterCloud");
+  // to render the input cloud without filtering uncomment the below and comment out line 140
+  //renderPointCloud(viewer,inputCloud,"inputCloud");
+
+  /* Clustering and segmenting the filtered cloud */
+    // The segmentation algorithm fits a plan to the points and uses the distance tolerance to decide which points belong
+    // to that plane. A large tolerance includes more points in the plane
+    
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr,pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessorI->RansacImplementation(filterCloud, 100, 0.2);
+    //std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr,pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = 
+    //                                    pointProcessorI->SeparateClouds_OwnImplementation(tempInliers_set, filterCloud);
+
+    if(render_obst)
+    {
+        
+        renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,1));
+    }
+    if(render_plane)
+    {
+         
+        renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
+    }
+
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = 
+                            pointProcessorI->ClusteringOwn_Implementation(segmentCloud.first, 0.5, 10, 700);
+    int clusterId = 0;
+    std::vector<Color> colors = {Color(1,0,0), Color(0,1,0), Color(0,1,0)};
+
+    for(pcl::PointCloud<pcl::PointXYZI>::Ptr cluster : cloudClusters)
+    {
+        if(render_clusters)
+        {
+            std::cout << "cluster size ";
+            pointProcessorI->numPoints(cluster);
+            renderPointCloud(viewer,cluster,"obstCloud"+std::to_string(clusterId),colors[clusterId]);
+        }
+        if(render_box)
+        {
+            Box box = pointProcessorI->BoundingBox(cluster);
+            renderBox(viewer,box,clusterId);
+        }
+      ++clusterId;
+    }
+    // renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,0));
+    // renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
+}
 int main (int argc, char** argv)
 {
     int cityviewer = true;
@@ -219,7 +280,7 @@ int main (int argc, char** argv)
         viewer->removeAllShapes();
         inputCloudI = pointProcessorI->loadPcd((*streamIterator).string());
         
-        cityBlock(viewer, pointProcessorI, inputCloudI);
+        cityBlock_OwnImplementation(viewer, pointProcessorI, inputCloudI);
         streamIterator++;
         if(streamIterator == stream.end())
             streamIterator = stream.begin();
