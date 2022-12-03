@@ -75,20 +75,93 @@ void render2DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Bo
 
 }
 
-void proximity(KdTree **tree,std::unordered_map<int,int> &temp_map, std::vector<std::vector<float>> points,int index, std::vector<int> &cluster, float distanceTol)
+void proximity(KdTree **tree,std::vector<int>& processed, std::vector<std::vector<float>> points,int index, std::vector<int> &cluster, float distanceTol)
 {
-	temp_map[index] = 1;
+	processed[index] = 1;
 	cluster.push_back(index);
 	std::vector<int> nearby;
 
 	nearby = (*tree)->search(points[index], distanceTol);
 	for(int &i : nearby)
 	{
-		if( temp_map.find(i) == temp_map.end())
+		if(processed[i] != 1)
 		{
-			proximity(tree, temp_map,points,i,cluster, distanceTol);
+			proximity(tree, processed,points,i,cluster, distanceTol);
 		}
 	}
+}
+
+std::vector<std::vector<float>> median_finder(std::vector<std::vector<float>> vec, int axis)
+{
+	int medium_index = 0;
+	if(vec.size() % 2 == 0)
+	{
+		medium_index = (vec.size() /2) - 0.5;
+	}
+	else
+	{
+		medium_index = (vec.size() /2);
+	}
+	
+	std::sort(vec.begin(), vec.end(),
+          [](const std::vector<int>& a, const std::vector<int>& b) {
+  	return a[axis] < b[axis];});
+
+
+	return vec[medium_index];
+}
+void fill_kdtree(KdTree &tree, std::list<std::vector<float>> points)
+{
+	//find medium
+	int depth = 0;
+	std::vector<float> i = 0;
+	int size = points.size();
+	while(points.size() != 0)
+	{
+		// x axis
+		if(depth % 3 == 0)
+		{
+			i = median_finder(points, 0);
+			tree->insert(points[i],depth); 
+			points.erase();
+		}
+		// y axis
+		else if(depth % 3 == 1)
+		{
+			i = median_finder(points, 1);
+			tree->insert(points[i],depth); 
+			points.erase();
+		}
+		// z axis
+		else if(depth % 3 == 2)
+		{
+			i = median_finder(points, 2);
+			tree->insert(points[i],depth); 
+			points.erase();
+		}
+		depth++;
+	}
+	   for (int i=0; i<points.size(); i++) 
+    	tree->insert(points[i],i); 
+}
+std::vector<std::vector<int>> euclideanClusterVector(const std::vector<std::vector<float>>& points, KdTree* tree, float distanceTol)
+{
+	// TODO: Fill out this function to return list of indices for each cluster
+	std::vector<std::vector<int>> clusters;
+
+	
+	std::vector<int> processed(points.size());
+
+	for(int i = 0; i < points.size() - 1; i++)
+	{
+		if(processed[i] != 1)
+		{
+			std::vector<int> cluster;
+			proximity(&tree, processed,points,i,cluster, distanceTol);
+			clusters.push_back(cluster);
+		}
+	}
+	return clusters;
 }
 
 std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<float>>& points, KdTree* tree, float distanceTol)
@@ -108,10 +181,8 @@ std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<flo
 	}
 	return clusters;
 }
-
 int main ()
 {
-
 	// Create viewer
 	Box window;
   	window.x_min = -10;

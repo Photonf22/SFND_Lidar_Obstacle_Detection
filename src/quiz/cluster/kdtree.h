@@ -50,7 +50,7 @@ struct KdTree
 		}
 		else // if ptr is not null then check
 		{
-			uint cd = depth % 2;
+			uint cd = depth % 3;
 			if(point[cd] < ((*node)->point)[cd])
 			{
 				insert_helper(&((*node)->left), point, id, depth+1);
@@ -81,9 +81,12 @@ struct KdTree
 			float XNegtolerance= target[0] - distanceTol;
 			float YPostolerance= target[1] + distanceTol; 
 			float YNegtolerance= target[1] - distanceTol;
+			float ZNegtolerance= target[2] + distanceTol;
+			float ZNegtolerance= target[2] - distanceTol;
 			// check if in box
 			if((*node)->point[0] <= XPostolerance  && (*node)->point[0] >= XNegtolerance && 
-				(*node)->point[1] <= YPostolerance  && (*node)->point[1] >= YNegtolerance) 
+				(*node)->point[1] <= YPostolerance  && (*node)->point[1] >= YNegtolerance &&
+				(*node)->point[2] <= ZPostolerance  && (*node)->point[2] >= ZNegtolerance) 
 			{
 				if(distance(target, (*node)->point) <= distanceTol)
 				{
@@ -91,11 +94,11 @@ struct KdTree
 				}
 			}
 			// if left or down most boundary of box is greater then we go to the left
-			if(target[depth%2]- distanceTol <(*node)->point[depth%2])
+			if(target[depth%3]- distanceTol <(*node)->point[depth%3)
 			{
 				search_helper(&((*node)->left),target,depth+1,ids,distanceTol);
 			}
-			if(target[depth%2]+ distanceTol >(*node)->point[depth%2])
+			if(target[depth%3]+ distanceTol >(*node)->point[depth%3])
 			{
 				search_helper(&((*node)->right),target,depth+1,ids,distanceTol);
 			}
@@ -103,7 +106,7 @@ struct KdTree
 	}
 	float distance(std::vector<float> point1, std::vector<float> point2)
 	{
-		return sqrt((point2[0]-point1[0])*(point2[0]-point1[0]) + (point2[1]-point1[1])*(point2[1]-point1[1]));
+		return sqrt((point2[0]-point1[0])*(point2[0]-point1[0]) + (point2[1]-point1[1])*(point2[1]-point1[1] + (point2[2]-point1[2])*(point2[2]-point1[2])));
 	}
 
 };

@@ -344,8 +344,48 @@ std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::C
     std::cout << "clustering took " << elapsedTime.count() << " milliseconds and found " << clusters.size() << " clusters" << std::endl;
 
     return clusterClouds;
-}                   
+} 
 
+template<typename PointT>
+std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::ClusteringOwn_ImplementationNoMap(typename pcl::PointCloud<PointT>::Ptr cloud, float clusterTolerance, int minSize, int maxSize)
+{
+    auto startTime = std::chrono::steady_clock::now();
+    std::vector<typename pcl::PointCloud<PointT>::Ptr> clusterClouds;
+    std::list<std::vector<float>> vecsList;
+    std::vector<std::vector<float>> vecs;
+    KdTree* tree = new KdTree;
+
+    for (int i=0; i < (cloud->points).size(); i++) 
+    {
+        std::vector<float> temp{(cloud->points)[i].x, (cloud->points)[i].y}; 
+        vecs.push_back(temp); 
+        vecsList.insert(temp); 
+    }
+    tree->insert(temp,i);
+    fill_kdtree(*tree, vecs);
+    
+  	std::vector<std::vector<int>> clusters = euclideanCluster(vecs, tree, clusterTolerance);
+
+  	for(std::vector<int> cluster : clusters)
+  	{
+        if(cluster.size() >= minSize && cluster.size() <= maxSize)
+        {
+  		    typename pcl::PointCloud<PointT>::Ptr clusterCloud(new pcl::PointCloud<PointT>);
+  		    for(int indice: cluster)
+  			    clusterCloud->points.push_back(cloud->points[indice]);
+            clusterCloud->width = clusterClouds.size();
+            clusterCloud->height = 1;
+            clusterCloud->is_dense = true;
+            clusterClouds.push_back(clusterCloud);
+        }
+  	}
+
+    auto endTime = std::chrono::steady_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+    std::cout << "clustering took " << elapsedTime.count() << " milliseconds and found " << clusters.size() << " clusters" << std::endl;
+
+    return clusterClouds;
+}     
 // ******************************************************************************************************************************************************
 template<typename PointT>
 Box ProcessPointClouds<PointT>::BoundingBox(typename pcl::PointCloud<PointT>::Ptr cluster)

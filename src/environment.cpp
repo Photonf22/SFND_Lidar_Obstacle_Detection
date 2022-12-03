@@ -223,7 +223,7 @@ void cityBlock_OwnImplementation(pcl::visualization::PCLVisualizer::Ptr& viewer,
     }
 
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = 
-                            pointProcessorI->ClusteringOwn_Implementation(segmentCloud.first, 0.5, 10, 700);
+                            pointProcessorI->ClusteringOwn_ImplementationNoMap(segmentCloud.first, 0.5, 10, 700);
     int clusterId = 0;
     std::vector<Color> colors = {Color(1,0,0), Color(0,1,0), Color(0,1,0)};
 
