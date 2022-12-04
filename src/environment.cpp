@@ -213,17 +213,15 @@ void cityBlock_OwnImplementation(pcl::visualization::PCLVisualizer::Ptr& viewer,
 
     if(render_obst)
     {
-        
         renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,1));
     }
     if(render_plane)
     {
-         
         renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
     }
 
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = 
-                            pointProcessorI->ClusteringOwn_ImplementationNoMap(segmentCloud.first, 0.5, 10, 700);
+                            pointProcessorI->ClusteringOwn_Implementation(segmentCloud.first, 0.5, 10, 700);
     int clusterId = 0;
     std::vector<Color> colors = {Color(1,0,0), Color(0,1,0), Color(0,1,0)};
 
@@ -233,7 +231,7 @@ void cityBlock_OwnImplementation(pcl::visualization::PCLVisualizer::Ptr& viewer,
         {
             std::cout << "cluster size ";
             pointProcessorI->numPoints(cluster);
-            renderPointCloud(viewer,cluster,"obstCloud"+std::to_string(clusterId),colors[clusterId]);
+            renderPointCloud(viewer,cluster,"obstCloud" + std::to_string(clusterId),colors[clusterId]);
         }
         if(render_box)
         {
@@ -245,6 +243,7 @@ void cityBlock_OwnImplementation(pcl::visualization::PCLVisualizer::Ptr& viewer,
     // renderPointCloud(viewer,segmentCloud.first,"obstCloud",Color(1,0,0));
     // renderPointCloud(viewer,segmentCloud.second,"planeCloud",Color(0,1,0));
 }
+
 int main (int argc, char** argv)
 {
     int cityviewer = true;
@@ -255,7 +254,7 @@ int main (int argc, char** argv)
     std::cout << "starting enviroment" << std::endl;
 
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-    CameraAngle setAngle = FPS;
+    CameraAngle setAngle = XY;
     
     //pcl::PointCloud<pcl::PointXYZ>::Ptr  temp;
     initCamera(setAngle, viewer);
@@ -267,7 +266,7 @@ int main (int argc, char** argv)
     the stream vector in a couple of ways, one option is to use an iterator. At the end of the above code block, 
     a variable for the input point cloud is also set up.
     */
-    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd("../src/sensors/data/pcd/data_1");
+    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd(dir);
     auto streamIterator = stream.begin();
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloudI;
     

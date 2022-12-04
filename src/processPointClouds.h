@@ -49,8 +49,11 @@ public:
     std::vector<boost::filesystem::path> streamPcd(std::string dataPath);
 
     std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT>::Ptr>  RansacImplementation(typename pcl::PointCloud<PointT>::Ptr cloud, int maxIterations, float distanceTol);
-    void proximity(KdTree **tree,std::unordered_map<int,int> &temp_map, std::vector<std::vector<float>> points,int index, std::vector<int> &cluster, float distanceTol);
+    void proximity(KdTree **tree,std::vector<int>& temp_vec, std::vector<std::vector<float>> points,int index, std::vector<int> &cluster, float distanceTol);
     std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<float>>& points, KdTree* tree, float distanceTol); 
+    KdTree* fill_kdtree(std::vector<std::vector<float>> points);
+    int median_finder(std::vector<std::vector<float>>& vecs, int axis);
     std::vector<typename pcl::PointCloud<PointT>::Ptr> ClusteringOwn_Implementation(typename pcl::PointCloud<PointT>::Ptr cloud, float clusterTolerance, int minSize, int maxSize);
+    
 };
 #endif /* PROCESSPOINTCLOUDS_H_ */

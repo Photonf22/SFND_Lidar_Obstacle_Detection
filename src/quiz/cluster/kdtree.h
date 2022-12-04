@@ -81,7 +81,7 @@ struct KdTree
 			float XNegtolerance= target[0] - distanceTol;
 			float YPostolerance= target[1] + distanceTol; 
 			float YNegtolerance= target[1] - distanceTol;
-			float ZNegtolerance= target[2] + distanceTol;
+			float ZPostolerance= target[2] + distanceTol;
 			float ZNegtolerance= target[2] - distanceTol;
 			// check if in box
 			if((*node)->point[0] <= XPostolerance  && (*node)->point[0] >= XNegtolerance && 
@@ -94,7 +94,7 @@ struct KdTree
 				}
 			}
 			// if left or down most boundary of box is greater then we go to the left
-			if(target[depth%3]- distanceTol <(*node)->point[depth%3)
+			if(target[depth%3]- distanceTol <(*node)->point[depth%3])
 			{
 				search_helper(&((*node)->left),target,depth+1,ids,distanceTol);
 			}
