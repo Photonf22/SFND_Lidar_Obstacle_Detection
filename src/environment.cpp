@@ -254,7 +254,7 @@ int main (int argc, char** argv)
     std::cout << "starting enviroment" << std::endl;
 
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-    CameraAngle setAngle = XY;
+    CameraAngle setAngle = FPS;
     
     //pcl::PointCloud<pcl::PointXYZ>::Ptr  temp;
     initCamera(setAngle, viewer);
